@@ -3,7 +3,7 @@ const WebSocket = require("ws")
 
 const ws = new WebSocket(`ws://localhost:${process.env.PORT}`, {
     headers: {
-        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidG9rZW5SZXZpc2lvbiI6MCwiaWF0IjoxNTg4MzUwNDg5LCJleHAiOjE1ODgzNTA3ODl9.09G-nnB0yim2MuZsgqBz4yoMB8925vJ3BS6ISU2qtZM"
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidG9rZW5SZXZpc2lvbiI6MCwiaWF0IjoxNTg4MzYxMjk1LCJleHAiOjE1ODgzNjE1OTV9.dmwVFcLlSRYoi6ne_HsNSvilnNRjoB0XVsBnSC6Z5DM"
     }
 })
 

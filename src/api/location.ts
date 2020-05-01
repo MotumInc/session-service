@@ -43,12 +43,37 @@ const calculateRegions = async (position: Coordinates, prisma: PrismaClient): Pr
         regions = r.map(region => ({
             id: region.id,
             name: region.name,
-            polygon: region.Polygon
+            polygon: region.Polygon,
         }))
     }
 
     const region = regions.find(({ polygon }) => isPointInPolygon(position, polygon))
     return region
+}
+
+const getDiscoveryInfo = async (region: Region, userID: number, prisma: PrismaClient) => {
+    const discovered = await prisma.userRegion.findOne({
+        where: {
+            userid: userID
+        },
+        select: {
+            completion: true
+        }
+    }) || await prisma.userRegion.create({
+        data: {
+            userid: userID,
+            completion: 0,
+            Region: {
+                connect: {
+                    id: region.id
+                }
+            }
+        }, select: {
+            completion: true
+        }
+    })
+
+    return { ...region, ...discovered }
 }
 
 export default eventHandler<IncomingLocationEvent>(async (event, store, emitter, prisma) => {
@@ -63,38 +88,52 @@ export default eventHandler<IncomingLocationEvent>(async (event, store, emitter,
 
     const userPosition = { longitude: event.longitude, latitude: event.latitude }
 
-    if (!state.region) {
+    if (!state.currentRegion) {
         const region = await calculateRegions(userPosition, prisma)
-        state = store.dispatch({ type: "region", region })
-        emitter.emit("region", { region })
+        if (region) {
+            const discoveredRegion = await getDiscoveryInfo(region, state.id, prisma)
+            state = store.dispatch({ type: "region", region: discoveredRegion })
+            emitter.emit("region", { region: discoveredRegion })
+        } else {
+            state = store.dispatch({ type: "region" })
+            emitter.emit("region", {})
+        }
     } else {
-        if (!isPointInPolygon(userPosition, state.region.polygon)) {
+        if (!isPointInPolygon(userPosition, state.currentRegion.polygon)) {
             const region = await calculateRegions(userPosition, prisma)
-            state = store.dispatch({ type: "region", region })
-            emitter.emit("region", { region })
+            if (region) {
+                const discoveredRegion = await getDiscoveryInfo(region, state.id, prisma)
+                state = store.dispatch({ type: "region", region: discoveredRegion })
+                emitter.emit("region", { region: discoveredRegion })
+            } else {
+                state = store.dispatch({ type: "region" })
+                emitter.emit("region", {})
+            }
         }
     }
 
-    const locations = await prisma.location.findMany({
-        where: {
-            region: state.region!.id
+    if (state.currentRegion) {
+        const locations = await prisma.location.findMany({
+            where: {
+                region: state.currentRegion!.id
+            }
+        })
+
+        const nearLocations = locations.filter(({ longitude, latitude }) => getDistance(userPosition, { longitude, latitude }) < viewArea)
+
+        const nearLocationObjects: LocationSet = nearLocations.reduce((acc, location) => ({ ...acc, [location.id]: location }), {})
+
+        const [newLocations, removedLocations] = intersection(nearLocationObjects, state.locations)
+
+        if (newLocations.length !== 0 || removedLocations.length !== 0) {
+            emitter.emit("poi", {
+                add: newLocations.map(key => nearLocationObjects[parseInt(key)]),
+                remove: removedLocations.map(parseInt)
+            })
+            state = store.dispatch({
+                type: "poi-update",
+                locations: nearLocationObjects
+            })
         }
-    })
-
-    const nearLocations = locations.filter(({ longitude, latitude }) => getDistance(userPosition, { longitude, latitude }) < viewArea)
-
-    const nearLocationObjects: LocationSet = nearLocations.reduce((acc, location) => ({ ...acc, [location.id]: location }), {})
-
-    const [newLocations, removedLocations] = intersection(nearLocationObjects, state.locations)
-
-    if (newLocations.length !== 0 || removedLocations.length !== 0) {
-        emitter.emit("poi", {
-            add: newLocations.map(key => nearLocationObjects[parseInt(key)]),
-            remove: removedLocations.map(parseInt)
-        })
-        state = store.dispatch({
-            type: "poi-update",
-            locations: nearLocationObjects
-        })
     }
 })

@@ -26,8 +26,20 @@ model Polygon {
 }
 
 model Region {
-  id       Int        @default(autoincrement()) @id
-  name     String
-  Location Location[]
-  Polygon  Polygon[]
+  id         Int          @default(autoincrement()) @id
+  name       String
+  Location   Location[]
+  Polygon    Polygon[]
+  UserRegion UserRegion[]
+}
+
+model UserRegion {
+  completion Float  @default(0)
+  id         Int    @default(autoincrement()) @id
+  region     Int
+  userid     Int
+  Region     Region @relation(fields: [region], references: [id])
+
+  @@index([region], name: "UserRegion_region_idx")
+  @@index([userid], name: "UserRegion_userid_idx")
 }

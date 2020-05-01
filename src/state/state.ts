@@ -23,6 +23,8 @@ export default (userid: number, ws: ws): StateStore =>
                 case "poi-update":
                     return { ...state, locations: event.locations }
                 case "region":
-                    return { ...state, region: event.region }
+                    return { ...state, currentRegion: event.region }
+                case "region-fetch":
+                    return { ...state, regions: event.regions }
             }
         })

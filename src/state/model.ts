@@ -6,7 +6,7 @@ export interface Coordinates {
 export interface Location {
     id: number;
     name: string;
-    coords: Coordinates
+    coords: Coordinates;
 }
 
 export interface Region {
@@ -15,13 +15,18 @@ export interface Region {
     polygon: Coordinates[];
 }
 
+export interface DiscoveredRegion extends Region {
+    completion: number;
+}
+
 export interface UserState {
     id: number;
     steps: number;
     distance: number;
     points: number;
-    locations: LocationSet
-    region?: Region;
+    locations: LocationSet;
+    currentRegion?: DiscoveredRegion;
+    regions?: RegionSet;
 }
 
 export const initialUserState = (id: number): UserState => ({
@@ -31,6 +36,10 @@ export const initialUserState = (id: number): UserState => ({
     points: 0,
     steps: 0
 })
+
+export type RegionSet = {
+    [k : number]: DiscoveredRegion
+}
 
 export type LocationSet = {
     [k : number]: Location

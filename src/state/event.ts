@@ -1,5 +1,5 @@
-import { LocationSet, Region, Coordinates, Location } from "./model"
-import { TypeOf, Type } from "../util/inShapeOf";
+import { LocationSet, Location, DiscoveredRegion, RegionSet } from "./model"
+import { TypeOf } from "../util/inShapeOf";
 
 export interface AccumulateEvent {
     type: "accumulate"
@@ -19,10 +19,15 @@ export interface POIEvent {
 
 export interface RegionEvent {
     type: "region";
-    region?: Region
+    region?: DiscoveredRegion;
 }
 
-export type StateEvents = AccumulateEvent | PointsAcuumulationEvent | POIEvent | RegionEvent
+export interface RegionFetchEvent {
+    type: "region-fetch";
+    regions: RegionSet;
+}
+
+export type StateEvents = AccumulateEvent | PointsAcuumulationEvent | POIEvent | RegionEvent | RegionFetchEvent
 
 export interface ClientPointEvent {
     type: "points";
@@ -37,7 +42,7 @@ export interface ClientPOIEvent {
 
 export interface ClientRegionEvent {
     type: "region";
-    region?: Region;
+    region?: DiscoveredRegion;
 }
 
 export interface ClientErrorEvent {

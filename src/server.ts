@@ -34,9 +34,31 @@ wss.on('connection', (ws: ws, req: http.IncomingMessage, clientID: number) => {
     const store = createStore(clientID, ws)
     const eventer = createEventer(ws)
 
+    prisma.userRegion.findMany({
+        where: {
+            userid: clientID
+        },
+        select: {
+            completion: true,
+            Region: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            }
+        }
+    }).then(regions => {
+        const regionSet = regions.reduce((acc, region) => ({ ...acc, [region.Region.id]: region }), {})
+        store.dispatch({
+            type: "region-fetch",
+            regions: regionSet
+        })
+    })
+
     const handlers = {
         location: locationHandler(prisma)
     }
+
     ws.on('message', (data) => {
         try {
             const obj = JSON.parse(data.toString()) as IncomingEvents
