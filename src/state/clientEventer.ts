@@ -21,7 +21,7 @@ class Emitter extends EventEmitter {
     }
 
     emit(type: string, event: any) {
-        this.ws.send(JSON.stringify({ type, event }))
+        this.ws.send(JSON.stringify({ type, ...event }))
         return super.emit(type, event)
     }
 }

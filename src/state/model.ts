@@ -44,3 +44,7 @@ export type RegionSet = {
 export type LocationSet = {
     [k : number]: Location
 }
+
+export const metersPerPoint = 100;
+export const stepsPerPoint = 150;
+export const viewArea = 50;

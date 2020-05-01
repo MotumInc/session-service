@@ -1,4 +1,4 @@
-import ws, { createWebSocketStream } from "ws";
+import ws from "ws";
 import http from "http"
 import { Socket } from "net";
 import { PrismaClient } from "@prisma/client";
@@ -31,29 +31,8 @@ const prisma = new PrismaClient({
 const { BIND_ADDRESS, PORT } = process.env
 
 wss.on('connection', (ws: ws, req: http.IncomingMessage, clientID: number) => {
-    const store = createStore(clientID, ws)
+    const store = createStore(clientID)
     const eventer = createEventer(ws)
-
-    prisma.userRegion.findMany({
-        where: {
-            userid: clientID
-        },
-        select: {
-            completion: true,
-            Region: {
-                select: {
-                    id: true,
-                    name: true
-                }
-            }
-        }
-    }).then(regions => {
-        const regionSet = regions.reduce((acc, region) => ({ ...acc, [region.Region.id]: region }), {})
-        store.dispatch({
-            type: "region-fetch",
-            regions: regionSet
-        })
-    })
 
     const handlers = {
         location: locationHandler(prisma)

@@ -2,8 +2,9 @@ require("dotenv-safe").config()
 const WebSocket = require("ws")
 
 const ws = new WebSocket(`ws://localhost:${process.env.PORT}`, {
+// const ws = new WebSocket("ws://api.motumapp.me:5505", {
     headers: {
-        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidG9rZW5SZXZpc2lvbiI6MCwiaWF0IjoxNTg4MzYxMjk1LCJleHAiOjE1ODgzNjE1OTV9.dmwVFcLlSRYoi6ne_HsNSvilnNRjoB0XVsBnSC6Z5DM"
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidG9rZW5SZXZpc2lvbiI6MCwiaWF0IjoxNTg4MzY4NTU0LCJleHAiOjE1ODgzNjg4NTR9.btNihkLSnoLVa15ZHil59PYAogzPLbfeB6Zg3RRsS0o"
     }
 })
 

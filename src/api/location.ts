@@ -1,5 +1,5 @@
 import { isPointInPolygon, getDistance } from "geolib";
-import { Location, Region, Coordinates, LocationSet } from "../state/model";
+import { Location, Region, Coordinates, LocationSet, metersPerPoint, stepsPerPoint, viewArea } from "../state/model";
 import eventHandler from "../state/eventHandler";
 import { IncomingLocationEvent } from "../state/event";
 import { PrismaClient } from "@prisma/client";
@@ -10,9 +10,6 @@ export interface LocationResponse {
     remove: number[];
 }
 
-const metersPerPoint = 100;
-const stepsPerPoint = 150;
-const viewArea = 50;
 
 const coinsForActivity = (distance: number, steps: number) =>
     Math.floor(Math.floor(distance) / metersPerPoint + steps / stepsPerPoint)
