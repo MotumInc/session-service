@@ -26,13 +26,14 @@ export interface UserState {
     points: number;
     locations: LocationSet;
     currentRegion?: DiscoveredRegion;
-    regions?: RegionSet;
+    regions: RegionSet;
 }
 
 export const initialUserState = (id: number): UserState => ({
     id, 
     distance: 0,
     locations: {},
+    regions: {},
     points: 0,
     steps: 0
 })
@@ -48,3 +49,4 @@ export type LocationSet = {
 export const metersPerPoint = 100;
 export const stepsPerPoint = 150;
 export const viewArea = 50;
+export const stepsPerRegion = 3000;
