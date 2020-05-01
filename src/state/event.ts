@@ -32,6 +32,7 @@ export type StateEvents = AccumulateEvent | PointsAcuumulationEvent | POIEvent |
 export interface ClientPointEvent {
     type: "points";
     points: number;
+    completion?: number;
 }
 
 export interface ClientPOIEvent {
