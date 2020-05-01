@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package registry;
+
+service UserRegistry {
+    rpc GetUser(UserQuery) returns (UserResponse) {}
+    rpc AddUser(AddUserRequest) returns (User) {}
+    rpc PushActivityMetrics(ActivityMetricsRequest) returns (ActivityMetrics) {}
+}
+
+message ActivityMetrics {
+    uint32 steps = 1;
+    double distance = 2;
+    uint32 points = 3;
+}
+
+message ActivityMetricsRequest {
+    uint64 id = 1;
+    ActivityMetrics metrics = 2;
+}
+
+message AddUserRequest {
+    uint64 id = 1;
+    string name = 2;
+    bool using_metric = 3;
+    oneof avatar { string avatar_field = 4; }
+    oneof bio { string bio_field = 5; }
+}
+
+message UserResponse {
+    oneof response {
+        User user = 2;
+    }
+}
+
+message User {
+    uint64 id = 1;
+    string name = 2;
+    string bio = 3;
+    string avatar = 4;
+    uint32 steps = 5;
+    double distance = 6;
+    uint32 points = 7;
+    bool using_metric = 8;
+}
+
+message UserQuery {
+    uint64 id = 1;
+}

@@ -1,0 +1,36 @@
+{
+  "name": "session",
+  "version": "0.1.0",
+  "description": "Service for managing real-time user activity sessions",
+  "main": "out/server.js",
+  "repository": "https://github.com/MotumInc/session-service.git",
+  "author": "q_link0_p",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "clear": "rm -Rf out",
+    "build": "sh scripts/build.sh",
+    "proto": "sh scripts/proto.sh",
+    "prisma": "prisma generate",
+    "docker": "source .env && docker build -t invictamotum/session --build-arg port=$PORT .",
+    "start": "node -r dotenv-safe/config out/server.js"
+  },
+  "devDependencies": {
+    "@prisma/cli": "2.0.0-beta.4",
+    "@types/google-protobuf": "^3.7.2",
+    "@types/ws": "^7.2.4",
+    "grpc-tools": "^1.8.1",
+    "grpc_tools_node_protoc_ts": "^3.0.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@grpc/proto-loader": "^0.5.4",
+    "@prisma/client": "2.0.0-beta.4",
+    "dotenv-safe": "^8.2.0",
+    "geolib": "^3.2.1",
+    "google-protobuf": "^3.11.4",
+    "grpc": "^1.24.2",
+    "typed-emitter": "^1.0.0",
+    "ws": "^7.2.5"
+  }
+}

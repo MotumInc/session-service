@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Location {
+  description String
+  id          Int     @default(autoincrement()) @id
+  latitude    Float   @map("lattitude")
+  longitude   Float
+  name        String
+  region      Int?
+  Region      Region? @relation(fields: [region], references: [id])
+}
+
+model Polygon {
+  id        Int     @default(autoincrement()) @id
+  latitude  Float   @map("lattitude")
+  longitude Float
+  region    Int?
+  Region    Region? @relation(fields: [region], references: [id])
+}
+
+model Region {
+  id       Int        @default(autoincrement()) @id
+  name     String
+  Location Location[]
+  Polygon  Polygon[]
+}

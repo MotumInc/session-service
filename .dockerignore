@@ -1,0 +1,8 @@
+vscode
+node_modules
+out
+.gitignore
+.git
+Dockerfile
+yarn-error.log
+.prettierrc
