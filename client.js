@@ -22,7 +22,12 @@ ws.on("open", () => {
         ws.send(message)
         setTimeout(send, 500)
     }
-    send()
+    setTimeout(() => ws.send(message), 1000)
+    setTimeout(() => ws.send(message), 2000)
+    setTimeout(() => ws.send(message), 3000)
+    setTimeout(() => ws.send(message), 4000)
+    setTimeout(() => ws.send(JSON.stringify({ type: "end" })))
+    // send()
 })
 
 ws.on("error", (err) => {

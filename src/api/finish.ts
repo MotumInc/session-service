@@ -28,7 +28,7 @@ const pushLocalActivity = (userid: number, regions: DiscoveredRegion[], prisma: 
 export default eventHandler<IncomingEndEvent>(async (event, store, emitter, prisma) => {
     let state = store.state
     const regions = Object.values(state.regions)
-    const [activity, _] = await Promise.all([
+    const [activity] = await Promise.all([
         pushActivity(state.id, state.steps, state.distance, state.points, regions),
         pushLocalActivity(state.id, regions, prisma)
     ])

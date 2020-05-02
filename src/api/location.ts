@@ -80,7 +80,8 @@ export default eventHandler<IncomingLocationEvent>(async (event, store, emitter,
         steps: event.steps
     })
 
-    const diff = coinsForActivity(state.distance, state.steps) - state.points
+    // const diff = coinsForActivity(state.distance, state.steps) - state.points
+    const diff = Math.random() < 0.3 ? 1 : 0
     if (diff || state.currentRegion?.completion)
         emitter.emit("point", { points: state.points, completion: state.currentRegion?.completion })
 

@@ -49,6 +49,9 @@ wss.on('connection', (ws: ws, req: http.IncomingMessage, clientID: number) => {
                     if (!inShapeOf(obj, IncomingLocationEventSchema)) throw new Error("Invalid event shape")
                     handlers.location(event, store, eventer)
                 } break;
+                case "end": {
+                    handlers.end({}, store, eventer)
+                } break;
             }
         } catch (e) {
             eventer.emit("error", { message: e.message || JSON.stringify(e) })
@@ -56,7 +59,7 @@ wss.on('connection', (ws: ws, req: http.IncomingMessage, clientID: number) => {
     })
 
     ws.on("close", () => {
-        handlers.end({ type: "end" }, store, eventer)
+        handlers.end({}, store, eventer)
     })
 })
 
