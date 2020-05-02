@@ -12,8 +12,8 @@ const message = JSON.stringify({
     type: "location",
     latitude: 50.46193310891305,
     longitude: 30.349437929821825,
-    steps: 10,
-    distance: 15
+    steps: 100,
+    distance: 150
 })
 
 ws.on("open", () => {
@@ -26,6 +26,8 @@ ws.on("open", () => {
     setTimeout(() => ws.send(message), 2000)
     setTimeout(() => ws.send(message), 3000)
     setTimeout(() => ws.send(message), 4000)
+    setTimeout(() => ws.send(message), 5000)
+    setTimeout(() => ws.send(message), 6000)
     setTimeout(() => ws.send(JSON.stringify({ type: "end" })))
     // send()
 })
