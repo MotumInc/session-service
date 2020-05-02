@@ -1,12 +1,13 @@
 import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
 import ws from "ws"
-import { ClientPOIEvent, ClientPointEvent, ClientRegionEvent, ClientErrorEvent } from "./event";
+import { ClientPOIEvent, ClientPointEvent, ClientRegionEvent, ClientErrorEvent, ClientEndEvent } from "./event";
 
 type Messages = {
     poi:    (event: Omit<ClientPOIEvent,    "type">) => void;
     point:  (event: Omit<ClientPointEvent,  "type">) => void;
     region: (event: Omit<ClientRegionEvent, "type">) => void;
+    end:    (event: Omit<ClientEndEvent,    "type">) => void;
     error:  (event: Omit<ClientErrorEvent,  "type">) => void;
 }
 
@@ -21,7 +22,8 @@ class Emitter extends EventEmitter {
     }
 
     emit(type: string, event: any) {
-        this.ws.send(JSON.stringify({ type, ...event }))
+        if (this.ws.readyState == ws.OPEN) 
+            this.ws.send(JSON.stringify({ type, ...event }))
         return super.emit(type, event)
     }
 }

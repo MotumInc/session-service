@@ -27,12 +27,23 @@ export interface RegionFetchEvent {
     regions: RegionSet;
 }
 
-export type StateEvents = AccumulateEvent | PointsAcuumulationEvent | POIEvent | RegionEvent | RegionFetchEvent
+export interface ResetEvent {
+    type: "reset"
+}
+
+export type StateEvents
+    = AccumulateEvent
+    | PointsAcuumulationEvent
+    | POIEvent
+    | RegionEvent
+    | RegionFetchEvent
+    | ResetEvent
 
 export interface ClientPointEvent {
     type: "points";
     points: number;
     completion?: number;
+    regionID?: number;
 }
 
 export interface ClientPOIEvent {
@@ -46,12 +57,24 @@ export interface ClientRegionEvent {
     region?: DiscoveredRegion;
 }
 
+export interface ClientEndEvent {
+    type: "end";
+    steps: number;
+    distance: number;
+    points: number;
+}
+
 export interface ClientErrorEvent {
     type: "error";
     message: string;
 }
 
-export type ClientEvents = ClientPointEvent | ClientPOIEvent | ClientRegionEvent | ClientErrorEvent
+export type ClientEvents
+    = ClientPointEvent
+    | ClientPOIEvent
+    | ClientRegionEvent
+    | ClientErrorEvent
+    | ClientEndEvent
 
 export const IncomingLocationEventSchema = {
     type: "location" as const,
@@ -71,4 +94,7 @@ export interface IncomingEndEvent {
     type: "end"
 }
 
-export type IncomingEvents = IncomingLocationEvent | IncomingStartEvent | IncomingEndEvent
+export type IncomingEvents
+    = IncomingLocationEvent
+    | IncomingStartEvent
+    | IncomingEndEvent

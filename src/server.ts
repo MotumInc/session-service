@@ -7,6 +7,7 @@ import inShapeOf from "./util/inShapeOf";
 import createStore from "./state/state";
 import createEventer from "./state/clientEventer";
 import locationHandler from "./api/location";
+import finishHandler from "./api/finish";
 import { IncomingEvents, IncomingLocationEventSchema } from "./state/event";
 
 const server = http.createServer()
@@ -35,7 +36,8 @@ wss.on('connection', (ws: ws, req: http.IncomingMessage, clientID: number) => {
     const eventer = createEventer(ws)
 
     const handlers = {
-        location: locationHandler(prisma)
+        location: locationHandler(prisma),
+        end: finishHandler(prisma)
     }
 
     ws.on('message', (data) => {
@@ -51,6 +53,10 @@ wss.on('connection', (ws: ws, req: http.IncomingMessage, clientID: number) => {
         } catch (e) {
             eventer.emit("error", { message: e.message || JSON.stringify(e) })
         }
+    })
+
+    ws.on("close", () => {
+        handlers.end({ type: "end" }, store, eventer)
     })
 })
 

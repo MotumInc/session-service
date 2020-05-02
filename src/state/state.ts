@@ -12,7 +12,7 @@ export default (userid: number): StateStore =>
                 case "accumulate":
                     if (state.currentRegion) {
                         state.currentRegion.completion = 
-                            Math.min(1.0, state.currentRegion.completion + state.steps / stepsPerRegion)
+                            Math.min(1.0, state.currentRegion.completion + event.steps / stepsPerRegion)
                     }
                     return {
                         ...state,
@@ -35,5 +35,7 @@ export default (userid: number): StateStore =>
                     return { ...state, currentRegion: event.region }
                 case "region-fetch":
                     return { ...state, regions: event.regions }
+                case "reset": 
+                    return initialUserState(userid)
             }
         })

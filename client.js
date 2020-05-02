@@ -1,31 +1,28 @@
-require("dotenv-safe").config()
+require("dotenv").config()
 const WebSocket = require("ws")
 
 const ws = new WebSocket(`ws://localhost:${process.env.PORT}`, {
-// const ws = new WebSocket("ws://api.motumapp.me:5505", {
+    // const ws = new WebSocket("ws://api.motumapp.me:5505", {
     headers: {
-        "authorization": `Bearer ${process.env.TOKEN}`
+        "authorization": `Bearer ${process.env.ACCESS_TOKEN}`
     }
+})
+
+const message = JSON.stringify({
+    type: "location",
+    latitude: 50.46193310891305,
+    longitude: 30.349437929821825,
+    steps: 10,
+    distance: 15
 })
 
 ws.on("open", () => {
     ws.addListener("message", console.log)
-    ws.send(JSON.stringify({
-        type: "location",
-        latitude: 50.46193310891305, 
-        longitude: 30.349437929821825,
-        steps: 10,
-        distance: 15
-    }))
-    setTimeout(() => {
-        ws.send(JSON.stringify({
-            type: "location",
-            latitude: 50.46193310891305, 
-            longitude: 30.349437929821825,
-            steps: 10,
-            distance: 15
-        }))
-    }, 5000)
+    const send = () => {
+        ws.send(message)
+        setTimeout(send, 500)
+    }
+    send()
 })
 
 ws.on("error", (err) => {

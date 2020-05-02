@@ -14,9 +14,15 @@ message ActivityMetrics {
     uint32 points = 3;
 }
 
+message RegionCompletion {
+    uint64 id = 1;
+    double completion = 2;
+}
+
 message ActivityMetricsRequest {
     uint64 id = 1;
     ActivityMetrics metrics = 2;
+    repeated RegionCompletion regions = 3;
 }
 
 message AddUserRequest {
