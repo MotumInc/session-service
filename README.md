@@ -1,3 +1,4 @@
+[![DeepScan grade](https://deepscan.io/api/teams/8152/projects/11539/branches/172734/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8152&pid=11539&bid=172734)
 # session-service
 Motum micro-service for handling real-time user activity sessions
 
