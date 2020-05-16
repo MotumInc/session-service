@@ -132,7 +132,7 @@ export default eventHandler<IncomingLocationEvent>(async (event, store, emitter,
                 add: newLocations.map(key => nearLocationObjects[parseInt(key)]),
                 remove: removedLocations.map(parseInt)
             })
-            state = store.dispatch({
+            store.dispatch({
                 type: "poi-update",
                 locations: nearLocationObjects
             })
